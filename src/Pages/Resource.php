@@ -14,7 +14,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Resource extends BaseResource
 {
-
     use ResolvesPageFields;
 
     /**
@@ -106,7 +105,7 @@ class Resource extends BaseResource
      */
     public static function newModel()
     {
-        if(request()->resourceId) {
+        if (request()->resourceId) {
             return resolve(Manager::class)
                 ->newQueryWithoutScopes()
                 ->whereKey(request()->resourceId)
@@ -147,10 +146,10 @@ class Resource extends BaseResource
     protected function getBaseAttributeFields()
     {
         return [
-            Text::make('Page title', 'nova_page_title')
+            Text::make('페이지 타이틀 ', 'nova_page_title')
                 ->rules(['required', 'string', 'max:255']),
 
-            DateTime::make('Page creation date', 'nova_page_created_at')
+            DateTime::make('페이지 생성일', 'nova_page_created_at')
                 ->format('DD-MM-YYYY HH:mm:ss')
                 ->rules(['required', 'string', 'max:255']),
         ];
@@ -164,15 +163,15 @@ class Resource extends BaseResource
     protected function getIndexTableFields()
     {
         return [
-            Text::make('Name', function() {
+            Text::make('이름', function () {
                 return $this->getName();
             })->sortable(),
 
-            Text::make('Title', function() {
+            Text::make('타이틀', function () {
                 return $this->getTitle();
             })->sortable(),
 
-            DateTime::make('Last updated on', function() {
+            DateTime::make('최종수정일', function () {
                 $updated_at = $this->getDate('updated_at');
                 return $updated_at ? $updated_at->toDateTimeString() : null;
             })->format(config('novapage.date_format'))->sortable()
@@ -275,11 +274,10 @@ class Resource extends BaseResource
     protected function serializeWithId(Collection $fields)
     {
         return [
-            'id' => tap(ID::make('id', function() {
-                        return $this->getKey();
-                    }))->resolve($this->resource),
+            'id' => tap(ID::make('id', function () {
+                return $this->getKey();
+            }))->resolve($this->resource),
             'fields' => $fields->all(),
         ];
     }
-
 }
