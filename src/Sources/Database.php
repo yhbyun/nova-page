@@ -70,7 +70,7 @@ class Database implements SourceInterface {
             'name' => $template->getName(),
             'title' => $template->getTitle(),
             'type' => $template->getType(),
-            'attributes' => json_encode($template->getAttributes()),
+            'attributes' => json_encode($template->getAttributes(), JSON_UNESCAPED_UNICODE),
             'created_at' => $template->getDate('created_at'),
             'updated_at' => Carbon::now()
         ]);
