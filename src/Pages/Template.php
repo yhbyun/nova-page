@@ -266,10 +266,10 @@ abstract class Template implements ArrayAccess
             return $this->getDate('created_at');
         }
 
-        if(!isset($this->attributes[$attribute]) && $this->throwOnMissing) {
-            $path = $this->getSource()->getFilePath($this->type, $this->name);
-            throw new ValueNotFoundException($attribute, get_class($this), $path);
-        }
+        // if(!isset($this->attributes[$attribute]) && $this->throwOnMissing) {
+        //     $path = $this->getSource()->getFilePath($this->type, $this->name);
+        //     throw new ValueNotFoundException($attribute, get_class($this), $path);
+        // }
 
         return $this->getAttribute($attribute);
     }
