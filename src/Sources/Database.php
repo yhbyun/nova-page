@@ -2,13 +2,11 @@
 
 namespace Whitecube\NovaPage\Sources;
 
-use \App;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Whitecube\NovaPage\Pages\Template;
+use App\Models\StaticPage;
 
-class Database implements SourceInterface {
-
+class Database implements SourceInterface
+{
     /**
      * The table used to store static pages content
      *
@@ -44,7 +42,7 @@ class Database implements SourceInterface {
      */
     public function fetch(Template $template)
     {
-        $staticPage = DB::table($this->tableName)->where('name', $template->getName())->first();
+        $staticPage = StaticPage::where('name', $template->getName())->first();
         if ($staticPage) {
             return [
                 'title' => $staticPage->title,
@@ -64,16 +62,13 @@ class Database implements SourceInterface {
      */
     public function store(Template $template)
     {
-        DB::table($this->tableName)->updateOrInsert([
-            'name' => $template->getName()
-        ], [
-            'name' => $template->getName(),
-            'title' => $template->getTitle(),
-            'type' => $template->getType(),
-            'attributes' => json_encode($template->getAttributes(), JSON_UNESCAPED_UNICODE),
-            'created_at' => $template->getDate('created_at'),
-            'updated_at' => Carbon::now()
-        ]);
+        $staticPage = StaticPage::firstOrNew(['name' => $template->getName()]);
+        $staticPage->name = $template->getName();
+        $staticPage->title = $template->getTitle();
+        $staticPage->type = $template->getType();
+        $staticPage->attributes = json_encode($template->getAttributes(), JSON_UNESCAPED_UNICODE);
+        $staticPage->created_at = $template->getDate('created_at');
+        $staticPage->save();
     }
 
     /**
@@ -86,8 +81,12 @@ class Database implements SourceInterface {
     protected function getParsedAttributes(Template $template, $attributes)
     {
         foreach ($attributes as $key => $value) {
-            if(!is_array($value) && !is_object($value)) continue;
-            if($template->isJsonAttribute($key)) continue;
+            if (!is_array($value) && !is_object($value)) {
+                continue;
+            }
+            if ($template->isJsonAttribute($key)) {
+                continue;
+            }
             $attributes[$key] = json_encode($value);
         }
 
