@@ -80,6 +80,10 @@ class Database implements SourceInterface
      */
     protected function getParsedAttributes(Template $template, $attributes)
     {
+        if (!is_array($attributes)) {
+            return null;
+        }
+
         foreach ($attributes as $key => $value) {
             if (!is_array($value) && !is_object($value)) {
                 continue;
