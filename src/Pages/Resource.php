@@ -75,7 +75,7 @@ class Resource extends BaseResource
      */
     public static function label()
     {
-        return 'nova-pages';
+        return '페이지';
     }
 
     /**
@@ -85,7 +85,7 @@ class Resource extends BaseResource
      */
     public static function singularLabel()
     {
-        return 'nova-page';
+        return '페이지';
     }
 
     /**
@@ -134,7 +134,7 @@ class Resource extends BaseResource
     {
         return array_prepend(
             $this->getTemplateAttributesFields($request),
-            new Panel('Base page attributes', $this->getBaseAttributeFields())
+            new Panel('기본 페이지 속성', $this->getBaseAttributeFields())
         );
     }
 
